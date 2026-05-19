@@ -11,7 +11,7 @@ export default function LandingPage() {
       <header className="absolute inset-x-0 top-0 z-10">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
           <Link href="/" className="flex items-center gap-2">
-            <Logo iconSize={32} textClassName="text-lg text-foreground" />
+            <Logo iconSize={64} textClassName="text-lg text-foreground" />
           </Link>
           <nav className="hidden gap-8 text-sm font-medium text-foreground/80 md:flex">
             <a href="#features" className="hover:text-primary">Features</a>
@@ -138,7 +138,7 @@ export default function LandingPage() {
 
       <footer className="border-t bg-secondary/40">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 md:flex-row">
-          <Logo iconSize={28} textClassName="text-sm text-foreground" />
+          <Logo iconSize={56} textClassName="text-sm text-foreground" />
           <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} SoilSync. Grow what feeds us.</p>
           <div className="flex gap-5 text-xs text-muted-foreground">
             <a href="#" className="hover:text-primary">Privacy</a>

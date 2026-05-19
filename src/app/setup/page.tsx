@@ -68,7 +68,7 @@ export default function SetupPage() {
       <div className="w-full max-w-lg">
         {/* Logo */}
         <Link href="/" className="flex items-center justify-center mb-8 group">
-          <Logo iconSize={40} textClassName="text-2xl font-bold text-forest" />
+          <Logo iconSize={80} textClassName="text-2xl font-bold text-forest" />
         </Link>
 
         {/* Progress Steps */}
@@ -99,8 +99,8 @@ export default function SetupPage() {
           {step === 1 && (
             <form onSubmit={handleStep1}>
               <div className="text-center mb-6">
-                <div className="w-14 h-14 rounded-xl bg-forest/10 flex items-center justify-center mx-auto mb-4 overflow-hidden">
-                  <Image src="/soilsync logo.svg" alt="" width={32} height={32} className="object-contain" />
+                <div className="w-28 h-28 rounded-xl bg-forest/10 flex items-center justify-center mx-auto mb-4 overflow-hidden">
+                  <Image src="/soilsync logo.svg" alt="" width={64} height={64} className="object-contain" />
                 </div>
                 <h2 className="text-2xl font-bold text-dark">Welcome to SoilSync</h2>
                 <p className="text-dark/60 mt-1">Let's get to know you first</p>

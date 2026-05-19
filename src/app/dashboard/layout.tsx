@@ -67,7 +67,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         }`}
       >
         <div className="flex items-center justify-between px-6 py-5">
-          <Logo iconSize={32} textClassName="text-lg text-white" />
+          <Logo iconSize={64} textClassName="text-lg text-white" />
           <button className="md:hidden" onClick={() => setOpen(false)} aria-label="Close menu">
             <X className="h-5 w-5" />
           </button>
