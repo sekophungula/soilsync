@@ -25,6 +25,7 @@ export interface Recommendation {
   title: string;
   description: string;
   impact: string;
+  cta: string;
   category: string;
   status: 'pending' | 'completed';
   createdAt: string;

@@ -1,200 +1,105 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import {
-  Settings, User, Bell, Radio, Shield, Save, LogOut, Trash2,
-  ChevronRight, Eye, EyeOff
-} from 'lucide-react';
 import { useStore } from '@/lib/store';
+import { mockProbes } from '@/lib/mockData';
+
+function Row({ label, defaultOn = false }: { label: string; defaultOn?: boolean }) {
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-sm">{label}</span>
+      <label className="relative inline-flex h-5 w-9 cursor-pointer items-center">
+        <input type="checkbox" defaultChecked={defaultOn} className="peer sr-only" />
+        <span className="absolute inset-0 rounded-full bg-input transition-colors peer-checked:bg-primary" />
+        <span className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-4" />
+      </label>
+    </div>
+  );
+}
 
 export default function SettingsPage() {
-  const router = useRouter();
-  const { userName, userEmail, logout, addToast } = useStore();
-
-  const [name, setName] = useState(userName || '');
-  const [email, setEmail] = useState(userEmail || '');
-  const [phone, setPhone] = useState('+27 82 123 4567');
-  const [emailAlerts, setEmailAlerts] = useState(true);
-  const [smsAlerts, setSmsAlerts] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [saving, setSaving] = useState(false);
-
-  const handleSaveProfile = () => {
-    setSaving(true);
-    setTimeout(() => {
-      setSaving(false);
-      addToast('Profile updated successfully!', 'success');
-    }, 1000);
-  };
-
-  const handleChangePassword = () => {
-    if (!currentPassword || !newPassword) {
-      addToast('Please fill in both password fields', 'error');
-      return;
-    }
-    addToast('Password changed successfully!', 'success');
-    setCurrentPassword('');
-    setNewPassword('');
-  };
-
-  const handleDeleteAccount = () => {
-    if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-      logout();
-      router.push('/setup');
-    }
-  };
+  const { userName, userEmail, addToast } = useStore();
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-2xl font-bold text-dark">Settings</h1>
-        <p className="text-sm text-dark/50 mt-1">Manage your account and preferences</p>
-      </div>
-
-      {/* Profile Settings */}
-      <div className="bg-white rounded-xl border border-cream-dark/30 p-6 card-hover">
-        <div className="flex items-center gap-2 mb-5">
-          <User className="w-5 h-5 text-forest" />
-          <h2 className="font-semibold text-dark">Profile Settings</h2>
-        </div>
-        <div className="space-y-4 max-w-md">
-          <div>
-            <label className="block text-sm font-medium text-dark/80 mb-1.5">Full Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg border border-cream-dark/50 bg-cream/50 focus:bg-white focus:border-forest focus:ring-2 focus:ring-forest/20 outline-none transition-all text-dark"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-dark/80 mb-1.5">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg border border-cream-dark/50 bg-cream/50 focus:bg-white focus:border-forest focus:ring-2 focus:ring-forest/20 outline-none transition-all text-dark"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-dark/80 mb-1.5">Phone Number</label>
-            <input
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg border border-cream-dark/50 bg-cream/50 focus:bg-white focus:border-forest focus:ring-2 focus:ring-forest/20 outline-none transition-all text-dark"
-            />
+    <div className="animate-fade-in">
+      <div className="grid gap-6 lg:grid-cols-3">
+        <section className="rounded-xl bg-card p-6 ring-1 ring-border lg:col-span-2">
+          <h2 className="text-base font-semibold">Profile</h2>
+          <p className="text-xs text-muted-foreground">Update your personal information.</p>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="text-sm font-medium">Name</label>
+              <input defaultValue={userName || 'Farmer'} className="mt-1.5 w-full rounded-lg border bg-background px-3 py-2 text-sm ring-1 ring-border" />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Email</label>
+              <input defaultValue={userEmail || 'farmer@soil.sync'} className="mt-1.5 w-full rounded-lg border bg-background px-3 py-2 text-sm ring-1 ring-border" />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Phone</label>
+              <input placeholder="+27 ..." className="mt-1.5 w-full rounded-lg border bg-background px-3 py-2 text-sm ring-1 ring-border" />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Province</label>
+              <input defaultValue="Limpopo" className="mt-1.5 w-full rounded-lg border bg-background px-3 py-2 text-sm ring-1 ring-border" />
+            </div>
           </div>
           <button
-            onClick={handleSaveProfile}
-            disabled={saving}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-forest text-white text-sm font-semibold hover:bg-forest-light transition-all disabled:opacity-70"
+            onClick={() => addToast('Profile saved', 'success')}
+            className="mt-5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-accent"
           >
-            {saving ? (
-              <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-              </svg>
-            ) : (
-              <Save className="w-4 h-4" />
-            )}
-            {saving ? 'Saving...' : 'Save Changes'}
+            Save changes
           </button>
-        </div>
-      </div>
+        </section>
 
-      {/* Notification Preferences */}
-      <div className="bg-white rounded-xl border border-cream-dark/30 p-6 card-hover">
-        <div className="flex items-center gap-2 mb-5">
-          <Bell className="w-5 h-5 text-forest" />
-          <h2 className="font-semibold text-dark">Notification Preferences</h2>
-        </div>
-        <div className="space-y-4 max-w-md">
-          {[
-            { label: 'Email Alerts', description: 'Receive daily soil health reports via email', checked: emailAlerts, onChange: setEmailAlerts },
-            { label: 'SMS Alerts', description: 'Get urgent alerts via SMS when action is needed', checked: smsAlerts, onChange: setSmsAlerts },
-          ].map((item) => (
-            <div key={item.label} className="flex items-center justify-between p-3 rounded-lg bg-cream/80 border border-cream-dark/30">
-              <div>
-                <div className="text-sm font-medium text-dark">{item.label}</div>
-                <div className="text-xs text-dark/50">{item.description}</div>
+        <section className="rounded-xl bg-card p-6 ring-1 ring-border">
+          <h2 className="text-base font-semibold">Notifications</h2>
+          <p className="text-xs text-muted-foreground">Choose how we reach you.</p>
+          <div className="mt-4 space-y-4">
+            <Row label="Email alerts" defaultOn />
+            <Row label="SMS alerts" />
+            <Row label="Weekly summary" defaultOn />
+          </div>
+        </section>
+
+        <section className="rounded-xl bg-card p-6 ring-1 ring-border lg:col-span-2">
+          <h2 className="text-base font-semibold">Probes</h2>
+          <p className="text-xs text-muted-foreground">Rename, calibrate, or remove devices.</p>
+          <div className="mt-4 divide-y">
+            {mockProbes.map(p => (
+              <div key={p.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
+                <div>
+                  <div className="font-medium">{p.name}</div>
+                  <div className="text-xs text-muted-foreground">{p.location}</div>
+                </div>
+                <div className="flex gap-2">
+                  <button className="rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-secondary">Rename</button>
+                  <button className="rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-secondary">Calibrate</button>
+                  <button className="rounded-lg px-3 py-1.5 text-sm font-medium text-destructive transition-colors hover:bg-secondary">Remove</button>
+                </div>
               </div>
-              <button
-                onClick={() => item.onChange(!item.checked)}
-                className={`relative w-10 h-6 rounded-full transition-all ${
-                  item.checked ? 'bg-forest' : 'bg-cream-dark/50'
-                }`}
-              >
-                <div className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-all ${
-                  item.checked ? 'left-[18px]' : 'left-0.5'
-                }`} />
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Change Password */}
-      <div className="bg-white rounded-xl border border-cream-dark/30 p-6 card-hover">
-        <div className="flex items-center gap-2 mb-5">
-          <Shield className="w-5 h-5 text-forest" />
-          <h2 className="font-semibold text-dark">Change Password</h2>
-        </div>
-        <div className="space-y-4 max-w-md">
-          <div className="relative">
-            <label className="block text-sm font-medium text-dark/80 mb-1.5">Current Password</label>
-            <div className="relative">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                className="w-full px-4 py-2.5 pr-10 rounded-lg border border-cream-dark/50 bg-cream/50 focus:bg-white focus:border-forest focus:ring-2 focus:ring-forest/20 outline-none transition-all text-dark"
-              />
-              <button
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-dark/40 hover:text-dark/60"
-              >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
-            </div>
+            ))}
           </div>
-          <div>
-            <label className="block text-sm font-medium text-dark/80 mb-1.5">New Password</label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg border border-cream-dark/50 bg-cream/50 focus:bg-white focus:border-forest focus:ring-2 focus:ring-forest/20 outline-none transition-all text-dark"
-            />
-          </div>
-          <button
-            onClick={handleChangePassword}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-forest text-white text-sm font-semibold hover:bg-forest-light transition-all"
-          >
-            Update Password
-          </button>
-        </div>
-      </div>
+        </section>
 
-      {/* Danger Zone */}
-      <div className="bg-white rounded-xl border border-red-200 p-6 card-hover">
-        <div className="flex items-center gap-2 mb-5">
-          <Trash2 className="w-5 h-5 text-red-500" />
-          <h2 className="font-semibold text-dark">Danger Zone</h2>
-        </div>
-        <p className="text-sm text-dark/60 mb-4">
-          Once you delete your account, there is no going back. Please be certain.
-        </p>
-        <button
-          onClick={handleDeleteAccount}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition-all"
-        >
-          <Trash2 className="w-4 h-4" />
-          Delete Account
-        </button>
+        <section className="rounded-xl bg-card p-6 ring-1 ring-border">
+          <h2 className="text-base font-semibold">Account</h2>
+          <p className="text-xs text-muted-foreground">Security and account actions.</p>
+          <div className="mt-4 space-y-3">
+            <button
+              onClick={() => addToast('Password reset email sent', 'info')}
+              className="w-full rounded-lg border px-4 py-2 text-sm font-medium transition-colors hover:bg-secondary"
+            >
+              Change password
+            </button>
+            <hr className="border-border" />
+            <button
+              onClick={() => addToast('Account deletion is disabled in demo', 'error')}
+              className="w-full rounded-lg px-4 py-2 text-sm font-medium text-destructive transition-colors hover:bg-secondary"
+            >
+              Delete account
+            </button>
+          </div>
+        </section>
       </div>
     </div>
   );

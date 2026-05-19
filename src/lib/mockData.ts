@@ -6,7 +6,6 @@ function generateHealthHistory(days: number): { date: string; score: number }[] 
   for (let i = days; i >= 0; i--) {
     const date = new Date();
     date.setDate(date.getDate() - i);
-    // Random walk with slight upward trend
     score += (Math.random() - 0.45) * 3;
     score = Math.max(55, Math.min(78, score));
     data.push({
@@ -69,6 +68,7 @@ export const mockRecommendations: Recommendation[] = [
     title: 'Add Organic Matter',
     description: 'Low microbial activity detected. Apply 5cm compost layer to improve soil biology.',
     impact: '+15 points soil health in 30 days',
+    cta: 'Mark as Done',
     category: 'soil-amendment',
     status: 'pending',
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
@@ -79,6 +79,7 @@ export const mockRecommendations: Recommendation[] = [
     title: 'Stop Tilling',
     description: 'Compaction increasing. Switch to no-till planting methods to preserve soil structure.',
     impact: 'Reduce compaction by 40%',
+    cta: 'Learn More',
     category: 'tillage',
     status: 'pending',
     createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
@@ -89,6 +90,7 @@ export const mockRecommendations: Recommendation[] = [
     title: 'Plant Cover Crop',
     description: 'Dry season approaching. Plant cowpeas to retain moisture and fix nitrogen.',
     impact: '+20% water retention',
+    cta: 'Get Seeds',
     category: 'planting',
     status: 'pending',
     createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
@@ -99,6 +101,7 @@ export const mockRecommendations: Recommendation[] = [
     title: 'Adjust Irrigation Schedule',
     description: 'Soil moisture levels dropping. Increase irrigation frequency to maintain optimal 30-40% range.',
     impact: 'Prevent crop water stress',
+    cta: 'Set Schedule',
     category: 'irrigation',
     status: 'pending',
     createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
@@ -109,6 +112,7 @@ export const mockRecommendations: Recommendation[] = [
     title: 'Test Soil pH Balance',
     description: 'pH trending acidic. Consider lime application if pH drops below 5.5.',
     impact: 'Maintain nutrient availability',
+    cta: 'Order Lime',
     category: 'soil-testing',
     status: 'pending',
     createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
@@ -168,3 +172,28 @@ export function getTrend(): { direction: 'up' | 'down' | 'stable'; value: number
     value: Math.abs(Math.round(diff)),
   };
 }
+
+// Health series matching soil-sync-grow format
+export type HealthPoint = { date: string; fieldA: number; fieldB: number; fieldC: number };
+
+function genSeries(): HealthPoint[] {
+  const out: HealthPoint[] = [];
+  const start = new Date();
+  start.setDate(start.getDate() - 89);
+  let a = 64, b = 61, c = 67;
+  for (let i = 0; i < 90; i++) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    a = Math.max(58, Math.min(75, a + (Math.random() - 0.45) * 1.6));
+    b = Math.max(55, Math.min(72, b + (Math.random() - 0.5) * 1.8));
+    c = Math.max(60, Math.min(78, c + (Math.random() - 0.45) * 1.5));
+    out.push({
+      date: d.toISOString().slice(5, 10),
+      fieldA: Math.round(a),
+      fieldB: Math.round(b),
+      fieldC: Math.round(c),
+    });
+  }
+  return out;
+}
+export const healthSeries = genSeries();
