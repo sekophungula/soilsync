@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Leaf, ArrowRight, Check, ChevronRight, Radio, MapPin, Sprout, Shield } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowRight, Check, ChevronRight, Radio, MapPin, Sprout, Shield } from 'lucide-react';
+import Logo from '@/components/Logo';
 import { useStore } from '@/lib/store';
 import { provinces, soilTypes, cropOptions } from '@/lib/mockData';
 
@@ -65,11 +67,8 @@ export default function SetupPage() {
     <div className="min-h-screen bg-cream flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-lg">
         {/* Logo */}
-        <Link href="/" className="flex items-center justify-center gap-2.5 mb-8 group">
-          <div className="w-10 h-10 rounded-xl bg-forest flex items-center justify-center transition-transform group-hover:scale-105">
-            <Leaf className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-2xl font-bold text-forest">SoilSync</span>
+        <Link href="/" className="flex items-center justify-center mb-8 group">
+          <Logo iconSize={40} textClassName="text-2xl font-bold text-forest" />
         </Link>
 
         {/* Progress Steps */}
@@ -100,8 +99,8 @@ export default function SetupPage() {
           {step === 1 && (
             <form onSubmit={handleStep1}>
               <div className="text-center mb-6">
-                <div className="w-14 h-14 rounded-xl bg-forest/10 flex items-center justify-center mx-auto mb-4">
-                  <Leaf className="w-7 h-7 text-forest" />
+                <div className="w-14 h-14 rounded-xl bg-forest/10 flex items-center justify-center mx-auto mb-4 overflow-hidden">
+                  <Image src="/soilsync logo.svg" alt="" width={32} height={32} className="object-contain" />
                 </div>
                 <h2 className="text-2xl font-bold text-dark">Welcome to SoilSync</h2>
                 <p className="text-dark/60 mt-1">Let's get to know you first</p>

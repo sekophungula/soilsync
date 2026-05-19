@@ -5,8 +5,9 @@ import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import {
   LayoutDashboard, Radio, Activity, Lightbulb, BarChart3,
-  Settings, Bell, LogOut, Menu, X, Sprout,
+  Settings, Bell, LogOut, Menu, X,
 } from 'lucide-react';
+import Logo from '@/components/Logo';
 import { useStore } from '@/lib/store';
 import ToastContainer from '@/components/Toast';
 
@@ -66,12 +67,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         }`}
       >
         <div className="flex items-center justify-between px-6 py-5">
-          <div className="flex items-center gap-2 font-bold tracking-tight">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/15 text-white">
-              <Sprout className="h-5 w-5" />
-            </span>
-            <span className="text-lg">SoilSync</span>
-          </div>
+          <Logo iconSize={32} textClassName="text-lg text-white" />
           <button className="md:hidden" onClick={() => setOpen(false)} aria-label="Close menu">
             <X className="h-5 w-5" />
           </button>
