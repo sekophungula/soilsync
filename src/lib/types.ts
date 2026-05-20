@@ -17,6 +17,8 @@ export interface SoilProbe {
   lastSync: string;
   readings: ProbeReading;
   healthHistory: { date: string; score: number }[];
+  cropType: string; // The crop type this probe is configured for
+  cropTypes?: string[]; // Multiple crop types if "mixed-crops"
 }
 
 export interface Recommendation {
@@ -33,9 +35,8 @@ export interface Recommendation {
 
 export interface FarmSetup {
   farmName: string;
-  farmSize: number;
+  farmSize: number; // in square meters
   province: string;
-  ownership: 'privately-owned' | 'communal' | 'leased' | 'government';
   primaryCrops: string;
   soilType: string;
   setupComplete: boolean;
@@ -54,3 +55,41 @@ export interface AIAnalysis {
   trend: 'improving' | 'stable' | 'declining';
   progress: number;
 }
+
+// South African languages for the language selector
+export const southAfricanLanguages = [
+  { code: 'en', name: 'English' },
+  { code: 'af', name: 'Afrikaans' },
+  { code: 'zu', name: 'isiZulu' },
+  { code: 'xh', name: 'isiXhosa' },
+  { code: 'st', name: 'Sesotho' },
+  { code: 'tn', name: 'Setswana' },
+  { code: 'ts', name: 'Xitsonga' },
+  { code: 'ss', name: 'siSwati' },
+  { code: 've', name: 'Tshivenḓa' },
+  { code: 'nr', name: 'isiNdebele' },
+];
+
+// 20 popular crop types for South African village farmers
+export const popularCropTypes = [
+  'Maize',
+  'Grass (Grazing)',
+  'Sorghum',
+  'Sunflower',
+  'Dry Beans',
+  'Groundnuts',
+  'Sweet Potato',
+  'Pumpkin',
+  'Butternut',
+  'Cabbage',
+  'Spinach',
+  'Tomato',
+  'Onion',
+  'Carrot',
+  'Potato',
+  'Sugar Beans',
+  'Cowpeas',
+  'Millet',
+  'Cassava',
+  'Mixed Crops',
+];

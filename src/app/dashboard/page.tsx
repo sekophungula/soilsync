@@ -2,7 +2,7 @@
 
 import {
   Activity, Radio, AlertTriangle, TrendingUp, Wind, Droplet, Thermometer,
-  FlaskConical, Zap, Gauge, Bug,
+  FlaskConical, Zap, Gauge, Bug, Sprout,
 } from 'lucide-react';
 import {
   LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend,
@@ -78,7 +78,7 @@ export default function DashboardPage() {
             </span>
           </div>
           <div className="mt-3 flex items-baseline gap-3">
-            <span className="text-3xl font-bold tracking-tight">3</span>
+            <span className="text-3xl font-bold tracking-tight">{mockProbes.length}</span>
             <span className="rounded-full bg-[var(--success)] px-2 py-0.5 text-[10px] font-bold text-white">All online</span>
           </div>
           <div className="mt-1 text-xs text-muted-foreground">Synced moments ago</div>
@@ -92,14 +92,14 @@ export default function DashboardPage() {
           </div>
           <div className="mt-3 flex items-baseline gap-3">
             <span className="text-3xl font-bold tracking-tight">{recs.filter(r => r.status === 'pending').length}</span>
-            <span className="rounded-full bg-destructive px-2 py-0.5 text-[10px] font-bold text-destructive-foreground">2 urgent</span>
+            <span className="rounded-full bg-destructive px-2 py-0.5 text-[10px] font-bold text-destructive-foreground">{recs.filter(r => r.priority === 'URGENT' && r.status === 'pending').length} urgent</span>
           </div>
-          <div className="mt-1 text-xs text-muted-foreground">3 pending review</div>
+          <div className="mt-1 text-xs text-muted-foreground">{recs.filter(r => r.status === 'pending').length} need attention</div>
         </div>
         <StatCard
-          label="Estimated Yield" value="2.8 t/ha"
-          sub={<>↑ +18% potential</>} trendOk
-          icon={<TrendingUp className="h-4.5 w-4.5 text-primary" />}
+          label="Crops Monitored" value={`${mockProbes.length}`}
+          sub={<>{mockProbes.map(p => p.cropType).join(', ')}</>}
+          icon={<Sprout className="h-4.5 w-4.5 text-primary" />}
           accent="bg-secondary"
         />
       </div>
@@ -126,9 +126,9 @@ export default function DashboardPage() {
                   }}
                 />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Line type="monotone" dataKey="fieldA" name="Field A" stroke="var(--forest)" strokeWidth={2.5} dot={false} />
-                <Line type="monotone" dataKey="fieldB" name="Field B" stroke="var(--forest-soft)" strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="fieldC" name="Field C" stroke="var(--warn)" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="fieldA" name="Grazing Field" stroke="var(--forest)" strokeWidth={2.5} dot={false} />
+                <Line type="monotone" dataKey="fieldB" name="Maize Patch" stroke="var(--forest-soft)" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="fieldC" name="Mixed Garden" stroke="var(--warn)" strokeWidth={2} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -146,7 +146,11 @@ export default function DashboardPage() {
                       <span className="h-2 w-2 rounded-full bg-[var(--success)]" />
                       <span className="text-sm font-semibold">{p.name}</span>
                     </div>
-                    <p className="mt-0.5 text-xs text-muted-foreground">Last updated: {p.lastSync}</p>
+                    <div className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Sprout className="h-3 w-3" />
+                      {p.cropType}
+                    </div>
+                    <p className="text-xs text-muted-foreground">Last updated: {p.lastSync}</p>
                   </div>
                   <span className="rounded-full border px-2 py-0.5 text-[10px] font-medium text-muted-foreground">Online</span>
                 </div>
@@ -196,7 +200,7 @@ export default function DashboardPage() {
                 <h3 className="mt-3 text-base font-semibold">{r.title}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">{r.description}</p>
                 <div className="mt-3 rounded-md bg-secondary/70 px-3 py-2 text-xs font-medium text-primary">
-                  Impact: {r.impact}
+                  What this means: {r.impact}
                 </div>
                 <button
                   className="mt-4 w-full rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-accent"
